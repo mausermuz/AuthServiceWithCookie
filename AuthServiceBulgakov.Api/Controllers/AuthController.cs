@@ -1,7 +1,6 @@
 ﻿using AuthServiceBulgakov.Api.Contracts;
 using AuthServiceBulgakov.Application.Options;
 using AuthServiceBulgakov.Application.UseCases.Users;
-using AuthServiceBulgakov.DataAccess.MSSQL;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
