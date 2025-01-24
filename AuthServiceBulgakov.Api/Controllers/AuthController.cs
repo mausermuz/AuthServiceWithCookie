@@ -2,24 +2,24 @@
 using AuthServiceBulgakov.Application.Options;
 using AuthServiceBulgakov.Application.UseCases.Users;
 using AuthServiceBulgakov.DataAccess.MSSQL;
-using AuthServiceBulgakov.Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace AuthServiceBulgakov.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController(
         IMediator mediator,
-        IOptions<JwtSettings> options,
-        ApplicationDbContext dbContext) : ControllerBase
+        IOptions<JwtSettings> options) : ControllerBase
     {
         private readonly JwtSettings _jwtSettings = options.Value;
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if(ModelState.IsValid)

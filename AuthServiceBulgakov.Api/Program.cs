@@ -41,6 +41,15 @@ builder.Services.AddAuthentication(i =>
         ClockSkew = jwtSettings.ExpireAccessToken
     };
     options.SaveToken = true;
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            context.Token = context.HttpContext.Request.Cookies["accessToken"];
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization();
