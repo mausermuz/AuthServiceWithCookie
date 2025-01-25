@@ -12,6 +12,7 @@ namespace AuthServiceBulgakov.DataAccess.MSSQL.Configurations
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.UserName).IsRequired();
+            builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
 
             builder.ComplexProperty(x => x.Email, options =>
             {
