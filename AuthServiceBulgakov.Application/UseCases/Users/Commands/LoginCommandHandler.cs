@@ -34,7 +34,7 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
 
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            var response = new LoginResponse(user.UserName!, accessToken, refreshToken);
+            var response = new LoginResponse(user.UserName!, accessToken, refreshToken, user.IsActive);
 
             return response;
         }
