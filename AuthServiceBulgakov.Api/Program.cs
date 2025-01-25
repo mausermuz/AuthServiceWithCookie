@@ -1,3 +1,4 @@
+using AuthServiceBulgakov.Api.Filters;
 using AuthServiceBulgakov.Api.Helpers;
 using AuthServiceBulgakov.Application;
 using AuthServiceBulgakov.Application.Options;
@@ -54,8 +55,10 @@ builder.Services.AddAuthentication(i =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers()
-                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new AuthServiceExceptionFilter());
+}).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
