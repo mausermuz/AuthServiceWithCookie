@@ -5,12 +5,12 @@ using AuthServiceBulgakov.Domain.Specifications;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthServiceBulgakov.Application.UseCases.Users
+namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
 {
     public class LoginCommandHandler(
         ApplicationDbContext dbContext,
         IJwtTokenService jwtTokenService,
-        IPasswordHasher passwordHasher, 
+        IPasswordHasher passwordHasher,
         IRefreshTokenService refreshTokenService) : IRequestHandler<LoginCommand, LoginResponse>
     {
         public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)

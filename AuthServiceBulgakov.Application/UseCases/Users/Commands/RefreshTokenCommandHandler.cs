@@ -5,7 +5,7 @@ using AuthServiceBulgakov.Domain.Specifications;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthServiceBulgakov.Application.UseCases.Users
+namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
 {
     public class RefreshTokenCommandHandler(
         ApplicationDbContext dbContext,
@@ -19,7 +19,7 @@ namespace AuthServiceBulgakov.Application.UseCases.Users
                                       .Include(x => x.RefreshToken)
                                       .Include(x => x.Roles)
                                       .FirstOrDefaultAsync(spec, cancellationToken);
-            
+
             if (user == null)
                 throw new Exception("Юзер не найден");
 

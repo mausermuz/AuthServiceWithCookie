@@ -1,10 +1,11 @@
 ﻿using AuthServiceBulgakov.Api.Contracts;
 using AuthServiceBulgakov.Application.Options;
-using AuthServiceBulgakov.Application.UseCases.Users;
+using AuthServiceBulgakov.Application.UseCases.Users.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace AuthServiceBulgakov.Api.Controllers
 {
@@ -18,6 +19,7 @@ namespace AuthServiceBulgakov.Api.Controllers
         private readonly JwtSettings _jwtSettings = options.Value;
 
         [HttpPost("[action]")]
+        [SwaggerOperation("Авторизация")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -38,6 +40,7 @@ namespace AuthServiceBulgakov.Api.Controllers
         }
 
         [HttpGet("[action]")]
+        [SwaggerOperation("Получение нового access и refresh токенов")]
         public async Task<IActionResult> Refresh()
         {
             if (!(Request.Cookies.TryGetValue("username", out var userName) && Request.Cookies.TryGetValue("refreshToken", out var refreshToken)))
