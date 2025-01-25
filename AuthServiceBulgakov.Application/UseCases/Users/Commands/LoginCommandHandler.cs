@@ -16,7 +16,6 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
     {
         public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var hashedPassword = passwordHasher.GenerateHash(request.Password);
             var spec = UserSpecification.ByUserName(request.UserName);
 
             var user = await dbContext.Users
@@ -24,7 +23,7 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
                                       .Include(x => x.RefreshToken)
                                       .FirstOrDefaultAsync(spec, cancellationToken);
 
-            if (user == null || !passwordHasher.VerifyPassword(request.Password, user?.PasswordHash)
+            if (user == null
                 || !user.IsActive)
                 throw new ValidationApplicationException("We could not log you in. Please check your username/password and try again");
 
