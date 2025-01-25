@@ -8,6 +8,6 @@ namespace AuthServiceBulgakov.Infrastructure.Impl.Services
             => BCrypt.Net.BCrypt.HashPassword(password);
 
         public bool VerifyPassword(string password, string hashPassword)
-            => BCrypt.Net.BCrypt.EnhancedVerify(password, hashPassword);
+            => BCrypt.Net.BCrypt.Verify(password, hashPassword);
     }
 }
