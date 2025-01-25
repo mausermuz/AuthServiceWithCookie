@@ -17,7 +17,6 @@ namespace AuthServiceBulgakov.Application
             services.AddMediatR(options =>
             {
                 options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                options.AddOpenBehavior(typeof(LoggingPipelineBehaviour<,>));
             });
 
             return services;

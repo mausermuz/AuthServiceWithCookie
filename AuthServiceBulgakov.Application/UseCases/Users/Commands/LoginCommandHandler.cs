@@ -1,6 +1,7 @@
 ﻿using AuthServiceBulgakov.Application.Dto;
 using AuthServiceBulgakov.Application.Services;
 using AuthServiceBulgakov.DataAccess.MSSQL;
+using AuthServiceBulgakov.Domain.Exceptions;
 using AuthServiceBulgakov.Domain.Specifications;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,11 +24,9 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
                                       .Include(x => x.RefreshToken)
                                       .FirstOrDefaultAsync(spec, cancellationToken);
 
-            if (user == null || passwordHasher.VerifyPassword(request.Password, user?.PasswordHash))
-                throw new Exception("Неправильный логин или пароль");
-
-            if (!user.IsActive)
-                throw new Exception("Юзер заблокирован");
+            if (user == null || !passwordHasher.VerifyPassword(request.Password, user?.PasswordHash)
+                || !user.IsActive)
+                throw new ValidationApplicationException("We could not log you in. Please check your username/password and try again");
 
             var accessToken = jwtTokenService.GenerateAccessToken(user);
             refreshTokenService.SaveRefreshToken(user);

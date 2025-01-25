@@ -19,6 +19,8 @@ namespace AuthServiceBulgakov.Application.MediatorPipeline
 
             var context = new ValidationContext<TRequest>(request);
 
+            var test = _validators.Select(x => x.Validate(request));
+
             var errorDictionary = _validators
                 .Select(x => x.Validate(context))
                 .SelectMany(x => x.Errors)
@@ -33,7 +35,7 @@ namespace AuthServiceBulgakov.Application.MediatorPipeline
                 ).ToDictionary(x => x.Key, y => y.Values);
 
             if (errorDictionary.Any())
-                throw new ValidationApplicationException(errorDictionary);
+                throw new FluentValidationException(errorDictionary);
 
             return await next();
         }

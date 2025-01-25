@@ -1,9 +1,13 @@
-﻿namespace AuthServiceBulgakov.Domain.Exceptions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AuthServiceBulgakov.Domain.Exceptions
 {
     public class ValidationApplicationException : Exception
     {
-        public IReadOnlyDictionary<string, string[]> Errors { get; }
-        public ValidationApplicationException(IReadOnlyDictionary<string, string[]> errors) : base("Ошибка валидации")
-            => Errors = errors;
+        public ValidationApplicationException(string message) : base(message) { }
     }
 }
