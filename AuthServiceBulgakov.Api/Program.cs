@@ -1,6 +1,7 @@
 using AuthServiceBulgakov.Api.Extensions;
 using AuthServiceBulgakov.Api.Filters;
 using AuthServiceBulgakov.Api.Helpers;
+using AuthServiceBulgakov.Api.Middlewares;
 using AuthServiceBulgakov.Application;
 using AuthServiceBulgakov.Application.Options;
 using AuthServiceBulgakov.DataAccess.MSSQL;
@@ -40,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CheckIsActiveUserMiddleware>();
 
 app.UseHttpsRedirection();
 
