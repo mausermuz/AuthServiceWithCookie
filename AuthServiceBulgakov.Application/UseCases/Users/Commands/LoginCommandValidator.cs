@@ -6,8 +6,8 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().NotNull().WithMessage("Логин не может быть пустым");
-            RuleFor(x => x.Password).NotEmpty().NotNull().WithMessage("Пароль не может быть пустым");
+            RuleFor(x => x.UserName).NotEmpty().NotNull().WithMessage($"{nameof(LoginCommand.UserName)} не может быть пустым");
+            RuleFor(x => x.Password).NotEmpty().NotNull().WithMessage($"{nameof(LoginCommand.Password)} не может быть пустым");
         }
     }
 }
