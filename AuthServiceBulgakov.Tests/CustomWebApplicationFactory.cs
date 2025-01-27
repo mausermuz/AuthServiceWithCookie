@@ -17,26 +17,13 @@ namespace AuthServiceBulgakov.Tests
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
             .Build();
 
-        private ConcurrentDictionary<string, HttpClient> HttpClients { get; } =
-            new ConcurrentDictionary<string, HttpClient>();
-
-        public void AddHttpClient(string clientName, HttpClient client)
-        {
-            if (!HttpClients.TryAdd(clientName, client))
-            {
-                throw new InvalidOperationException(
-                    $"HttpClient with name {clientName} is already added");
-            }
-        }
-
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureTestServices(services => 
             {
                 services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
 
-                services.AddSingleton<IHttpClientFactory>(new CustomHttpClientFactory(HttpClients));
-                
+               
                 services.AddDbContextFactory<ApplicationDbContext>((IServiceProvider sp, DbContextOptionsBuilder opts) =>
                     {
                         var test = _sqlContainer.GetConnectionString();

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
-using System.Web;
 
 namespace AuthServiceBulgakov.Tests.Integrations
 {
@@ -10,15 +9,17 @@ namespace AuthServiceBulgakov.Tests.Integrations
     {
         private readonly IServiceScope _serviceScope;
         protected readonly HttpClient HttpClient;
+        protected readonly HttpClient HttpClientSecond;
 
         protected BaseIntegrationTest(CustomWebApplicationFactory factory)
         {
             _serviceScope = factory.Services.CreateScope();
 
             HttpClient = factory.CreateClient();
+            HttpClientSecond = factory.CreateClient();
 
             var context = _serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            //context.Database.EnsureDeleted();
+
             context.Database.Migrate();
         }
 
@@ -37,8 +38,8 @@ namespace AuthServiceBulgakov.Tests.Integrations
             var path = properties[2].Replace("path=", "");
             var cookie = new Cookie(name, value, path)
             {
-                Secure = properties.Contains("secure"),
-                HttpOnly = properties.Contains("httponly"),
+                Secure = properties.Contains("secure") == true ? properties.Contains("secure") : false,
+                HttpOnly = properties.Contains("httponly") == true ? properties.Contains("httponly") : false,
                 Expires = DateTime.Parse(properties[1].Replace("expires=", ""))
             };
             return cookie;

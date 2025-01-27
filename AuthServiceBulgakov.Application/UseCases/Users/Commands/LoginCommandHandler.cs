@@ -23,9 +23,14 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Commands
                                       .Include(x => x.RefreshToken)
                                       .FirstOrDefaultAsync(spec, cancellationToken);
 
+            if (user == null || !user.IsActive) 
+            {
+                throw new ValidationApplicationException("We could not log you in. Please check your username/password and try again");
+            }
+
             var isCorrectPassword = passwordHasher.VerifyPassword(request.Password, user?.PasswordHash);
 
-            if (user == null || !user.IsActive || !isCorrectPassword)
+            if (!isCorrectPassword)
                 throw new ValidationApplicationException("We could not log you in. Please check your username/password and try again");
 
             var accessToken = jwtTokenService.GenerateAccessToken(user);
