@@ -3,6 +3,7 @@ using AuthServiceBulgakov.DataAccess.MSSQL;
 using AuthServiceBulgakov.Domain.Constants;
 using AuthServiceBulgakov.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AuthServiceBulgakov.Api.Helpers
 {
@@ -16,29 +17,38 @@ namespace AuthServiceBulgakov.Api.Helpers
         {
             logger.LogInformation("Старт процесса миграции и ининциализации базы данных...");
 
-            using var transaction = await dbContext.Database.BeginTransactionAsync();
+            var strategy = dbContext.Database.CreateExecutionStrategy();
 
-            try
-            {
-                var pendingMigration = await dbContext.Database.GetPendingMigrationsAsync();
-                if (pendingMigration.Any())
+            await strategy.ExecuteAsync(async () =>
                 {
-                    logger.LogInformation("Применение миграций для базы данных...");
-                    await dbContext.Database.MigrateAsync();
-                    logger.LogInformation("Мигарции применились");
-                }
+                    using var transaction = await dbContext.Database.BeginTransactionAsync();
 
-                await InitializeDefaultRoles();
-                await InitializeDefaultUsers();
+                    try
+                    {
+                        var pendingMigration = await dbContext.Database.GetPendingMigrationsAsync();
+                        if (pendingMigration.Any())
+                        {
+                            logger.LogInformation("Применение миграций для базы данных...");
+                            await dbContext.Database.MigrateAsync();
+                            logger.LogInformation("Мигарции применились");
+                        }
 
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "Ошибка при инициализации базы данных: {0}", e.Message);
-                await transaction.RollbackAsync();
-                throw;
-            }
+                        await InitializeDefaultRoles();
+                        await InitializeDefaultUsers();
+
+                        await transaction.CommitAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError(e, "Ошибка при инициализации базы данных: {0}", e.Message);
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                });
+
+           
+
+            
         }
 
         private async Task InitializeDefaultRoles()

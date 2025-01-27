@@ -34,4 +34,8 @@
     <ProjectReference Include="..\AuthServiceBulgakov.Infrastructure.Impl\AuthServiceBulgakov.Infrastructure.Impl.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	  <InternalsVisibleTo Include="AuthServiceBulgakov.Tests" />
+  </ItemGroup>
+
 </Project>
