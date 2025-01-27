@@ -3,6 +3,7 @@ using AuthServiceBulgakov.DataAccess.MSSQL;
 using AuthServiceBulgakov.Domain.Constants;
 using AuthServiceBulgakov.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AuthServiceBulgakov.Api.Helpers
@@ -35,6 +36,7 @@ namespace AuthServiceBulgakov.Api.Helpers
 
                         await InitializeDefaultRoles();
                         await InitializeDefaultUsers();
+                        await InitializeTestUsers();
 
                         await transaction.CommitAsync();
                     }
@@ -97,6 +99,14 @@ namespace AuthServiceBulgakov.Api.Helpers
             await dbContext.SaveChangesAsync();
 
             logger.LogInformation("Окончание инициализации базы данных дефолтными пользователями");
+        }
+
+        private async Task InitializeTestUsers()
+        {
+            var pathToScript = Path.GetFullPath(@"Scripts\UsersCreate.sql");
+            var sqlScript = File.ReadAllText(pathToScript);
+
+            await dbContext.Database.ExecuteSqlRawAsync(sqlScript);
         }
     }
 }

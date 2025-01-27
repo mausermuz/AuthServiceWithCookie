@@ -13,6 +13,7 @@ namespace AuthServiceBulgakov.Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehaviour<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehaviourWithoutResponse<,>));
 
             services.AddMediatR(options =>
             {

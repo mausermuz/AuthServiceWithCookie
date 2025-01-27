@@ -2,6 +2,7 @@
 using AuthServiceBulgakov.Application.Options;
 using AuthServiceBulgakov.Application.UseCases.Users.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
@@ -18,6 +19,7 @@ namespace AuthServiceBulgakov.Api.Controllers
 
         [HttpPost("[action]")]
         [SwaggerOperation("Авторизация")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if(ModelState.IsValid)

@@ -53,7 +53,7 @@ namespace AuthServiceBulgakov.Domain.Entites
             IsActive = true;
         }
 
-        public void SetDective()
+        public void SetDeActive()
         {
             IsActive = false;
         }

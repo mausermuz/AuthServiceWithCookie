@@ -38,4 +38,10 @@
 	  <InternalsVisibleTo Include="AuthServiceBulgakov.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Scripts\UsersCreate.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

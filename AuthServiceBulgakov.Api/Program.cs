@@ -6,6 +6,9 @@ using AuthServiceBulgakov.Application;
 using AuthServiceBulgakov.Application.Options;
 using AuthServiceBulgakov.DataAccess.MSSQL;
 using AuthServiceBulgakov.Infrastructure.Impl;
+using AuthServiceBulgakov.Infrastructure.Impl.Authenticated;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,8 @@ builder.Services.AddMsSQL(builder.Configuration)
                 .AddCustomAuthentication(builder.Configuration);
 
 builder.Services.AddScoped<DbIniailize>();
+builder.Services.AddSingleton<IAuthorizationHandler, RolesAuthorizeHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, RolesAuthorizePolicyProvider>();
 
 builder.Services.AddControllers(options =>
 {

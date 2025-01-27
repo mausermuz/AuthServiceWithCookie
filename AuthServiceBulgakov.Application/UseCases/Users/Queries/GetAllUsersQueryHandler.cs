@@ -41,12 +41,12 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Queries
             if(resultString == null)
             {
                 listDto = await _dbContext.Users.AsNoTracking()
-                                            .Select(x => new UserListDto
-                                            {
-                                                Id = x.Id,
-                                                UserName = x.UserName,
-                                                IsActive = x.IsActive,
-                                            }).ToListAsync(cancellationToken);
+                                                .Select(x => new UserListDto
+                                                {
+                                                    Id = x.Id,
+                                                    UserName = x.UserName,
+                                                    IsActive = x.IsActive,
+                                                }).ToListAsync(cancellationToken);
 
                 await db.SetAsync<IReadOnlyList<UserListDto>>(USERS_KEY, listDto, TimeSpan.FromMinutes(10));
 

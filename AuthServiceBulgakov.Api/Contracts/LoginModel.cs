@@ -2,5 +2,5 @@
 
 namespace AuthServiceBulgakov.Api.Contracts
 {
-    public record LoginModel([Required]string UserName, [Required]string Password);
+    public record LoginModel(string UserName, string Password);
 }
