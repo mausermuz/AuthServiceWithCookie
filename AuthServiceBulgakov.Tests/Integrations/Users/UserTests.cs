@@ -36,6 +36,7 @@ namespace AuthServiceBulgakov.Tests.Integrations.Users
 
             res.Headers.TryGetValues("Set-Cookie", out var cookiesHeader);
             HttpClientSecond.DefaultRequestHeaders.Add("Cookie", cookiesHeader);
+
             // Act
             var response = await HttpClientSecond.GetAsync("/api/user/getusers");
 

@@ -3,8 +3,6 @@ using AuthServiceBulgakov.DataAccess.MSSQL;
 using AuthServiceBulgakov.Domain.Constants;
 using AuthServiceBulgakov.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AuthServiceBulgakov.Api.Helpers
 {

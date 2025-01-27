@@ -10,7 +10,7 @@
         public int DaysToExpirationRefreshToken { get; set; }
 
         public TimeSpan ExpireAccessToken => TimeSpan.FromMinutes(MinutesToExpirationAccessToken);
-        public TimeSpan ExpireRefreshTokenToken => TimeSpan.FromDays(DaysToExpirationRefreshToken);
+        //public TimeSpan ExpireRefreshTokenToken => TimeSpan.FromDays(DaysToExpirationRefreshToken);
 
     }
 }
