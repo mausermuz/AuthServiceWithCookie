@@ -16,6 +16,8 @@ namespace AuthServiceBulgakov.DataAccess.MSSQL
                 options.UseSqlServer(connectionString);
             });
 
+            services.AddSingleton<DapperContext>();
+
             return services;
         }
     }

@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using AuthServiceBulgakov.Application.Extensions;
+using Dapper;
+using AuthServiceBulgakov.Domain.Entites;
 
 namespace AuthServiceBulgakov.Application.UseCases.Users.Queries
 {
@@ -13,10 +15,14 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Queries
         
         private readonly ConfigurationOptions _option;
         private readonly ApplicationDbContext _dbContext;
+        private readonly DapperContext _dapperContext;
 
         public const string USERS_KEY = "get_users_key";
 
-        public GetAllUsersQueryHandler(ApplicationDbContext dbContext, IConfiguration configuration)
+        public GetAllUsersQueryHandler(
+            ApplicationDbContext dbContext, 
+            IConfiguration configuration,
+            DapperContext dapperContext)
         {
             _dbContext = dbContext;
 
@@ -28,29 +34,28 @@ namespace AuthServiceBulgakov.Application.UseCases.Users.Queries
                     configuration.GetSection("Redis").Value!
                 }
             };
+
+            _dapperContext = dapperContext;
         }
 
         public async Task<IReadOnlyList<UserListDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var listDto = new List<UserListDto>();
+            IEnumerable<UserListDto> listDto;
 
             await using var redis = await ConnectionMultiplexer.ConnectAsync(_option);
             var db = redis.GetDatabase();
             var resultString = await db.GetAsync<IReadOnlyList<UserListDto>>(USERS_KEY);
 
-            if(resultString == null)
+            if (resultString == null)
             {
-                listDto = await _dbContext.Users.AsNoTracking()
-                                                .Select(x => new UserListDto
-                                                {
-                                                    Id = x.Id,
-                                                    UserName = x.UserName,
-                                                    IsActive = x.IsActive,
-                                                }).ToListAsync(cancellationToken);
+                string query = "SELECT Id, UserName, IsActive FROM dbo.Users";
 
-                await db.SetAsync<IReadOnlyList<UserListDto>>(USERS_KEY, listDto, TimeSpan.FromMinutes(10));
+                using var connection = _dapperContext.CreateConnetion();
+                listDto = await connection.QueryAsync<UserListDto>(query);
 
-                return listDto;
+                await db.SetAsync<IReadOnlyList<UserListDto>>(USERS_KEY, listDto.ToList(), TimeSpan.FromMinutes(10));
+
+                return listDto.ToList();
             }
 
             return resultString;

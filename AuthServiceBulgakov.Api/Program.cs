@@ -31,6 +31,7 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCustomCors();
 
 var app = builder.Build();
 
@@ -46,6 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAllRequestFromlocalhost4200");
 
 app.UseMiddleware<CheckIsActiveUserMiddleware>();
 
